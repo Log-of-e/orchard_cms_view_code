@@ -1,0 +1,5 @@
+@{
+    Orchard.ContentManagement.ContentItem contentItem = Model.ContentPart.ContentItem;
+}
+@* Could have used ItemDisplayLink() if no need for rel=bookmark *@
+<h2 class="entry-title" ><a href="@Url.ItemDisplayUrl(contentItem)" rel="bookmark">@Html.ItemDisplayText(contentItem)</a></h2>

@@ -1,0 +1,11 @@
+﻿@using Orchard.Utility.Extensions;
+@{
+    // forward blog's description into the Layout Description zone
+    Layout.Description.Add(Model.DescriptionZone);
+}
+
+@Display(Model.Header)
+
+<div id="content" class="content-item">
+@Display(Model.Content)
+</div>

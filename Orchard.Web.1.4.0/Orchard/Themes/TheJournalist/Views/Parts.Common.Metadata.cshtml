@@ -1,0 +1,9 @@
+﻿<div class="signature">
+    <p class="author vcard">Written by <span class="fn">@Model.ContentPart.Owner.UserName</span> <span class="edit">@* todo Edit Link *@</span></p>
+    <p><abbr class="updated" title="@Model.ContentPart.ModifiedUtc.ToLocalTime()">@Model.ContentPart.ModifiedUtc.ToLocalTime().ToString("D") @T("at") @Model.ContentPart.ModifiedUtc.ToLocalTime().ToString("t")</abbr></p>
+</div>	
+<div class="tags">
+@*    <p>Posted in <?php the_category(',') ?></p>
+    <?php if ( the_tags('<p>Tagged with ', ', ', '</p>') ) ?>
+*@</div>
+

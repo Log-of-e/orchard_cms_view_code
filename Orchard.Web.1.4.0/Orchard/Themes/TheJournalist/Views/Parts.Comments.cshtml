@@ -1,0 +1,60 @@
+﻿@using Orchard.Comments.Models;
+@using Orchard.Comments;
+@using Orchard.Security;
+@using Orchard.Utility.Extensions;
+
+@{
+    var name = Convert.ToString(TempData["CreateCommentContext.Name"]);
+    var commentText = Convert.ToString(TempData["CreateCommentContext.CommentText"]);
+    var email = Convert.ToString(TempData["CreateCommentContext.Email"]);
+    var siteName = Convert.ToString(TempData["CreateCommentContext.SiteName"]);
+    
+    Orchard.ContentManagement.ContentItem contentItem = Model.ContentPart.ContentItem;
+ }
+
+<a name="comments" id="comments"></a>
+
+@if (Model.ContentPart.Comments.Count > 0) {
+<h3 class="reply">@T.Plural("1 Comment", "{0} Comments", (int)Model.ContentPart.Comments.Count) to @Html.ItemDisplayText(contentItem)</h3>
+@Display(New.ListOfComments(Comments: Model.ContentPart.Comments, ContentItem: Model.ContentPart.ContentItem));
+}
+
+<a name="respond" id="respond"></a>
+@if (Model.ContentPart.CommentsActive == false) {
+    if (Model.ContentPart.Comments.Count > 0) {
+        <p class="nocomments">@T("Comments are closed.")</p>    
+    }
+}
+else if (!Request.IsAuthenticated && !AuthorizedFor(Permissions.AddComment)) {
+<p class="info message">@T("You must {0} to comment.", Html.ActionLink(T("log on").ToString(), "LogOn", new { Controller = "Account", Area = "Orchard.Users", ReturnUrl = string.Format("{0}#addacomment", Context.Request.RawUrl) }))</p>
+}
+else {
+<h3 class="reply">Leave a Reply</h3>
+    using (Html.BeginForm("Create", "Comment", new { area = "Orchard.Comments" }, FormMethod.Post, new { @class = "comment-form", id="commentform" })) { 
+    @Html.ValidationSummary() 
+        <div class="postinput">
+        @if (!Request.IsAuthenticated) {
+        <p><input class="comment" type="text" name="Name" id="author" value="@name" size="22" tabindex="1" />
+        <label for="author"><small>@T("Name") @T("(required)")</small></label></p>
+
+        <p><input class="comment" type="text" name="Email" id="email" value="@email" size="22" tabindex="2" />
+        <label for="email"><small>@T("Mail (will not be published)") @T("(required)")</small></label></p>
+
+        <p><input class="comment" type="text" name="SiteName" id="url" value="@siteName" size="22" tabindex="3" />
+        <label for="url"><small>Website</small></label></p>
+        }
+        else {
+        @Html.Hidden("Name", WorkContext.CurrentUser.UserName ?? "")
+        @Html.Hidden("Email", WorkContext.CurrentUser.Email ?? "")
+        <p class="logged">@T("Logged in as {0}.", WorkContext.CurrentUser.UserName)</p>
+    }
+
+    <p><textarea name="CommentText" id="comment" cols="100%" rows="10" tabindex="4">@commentText</textarea></p>
+
+        <p><input class="submit" name="submit" type="submit" id="submit" tabindex="5" value="Submit Comment" title="@T("Please review your comment before submitting")" /></p>
+    @Html.Hidden("CommentedOn", (int)Model.ContentPart.ContentItem.Id) 
+    @Html.Hidden("ReturnUrl", Context.Request.ToUrlString()) 
+    @Html.AntiForgeryTokenOrchard() 
+    </div>
+    }
+} 

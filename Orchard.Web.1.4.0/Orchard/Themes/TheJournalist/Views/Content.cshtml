@@ -1,0 +1,19 @@
+﻿@using Orchard.Utility.Extensions;
+
+@Display(Model.Header)
+
+<div id="content" class="content-item">
+    <div class="post hentry">
+        <div class="main entry-content group">
+        @Display(Model.Content)
+        </div>
+        @if(Model.Meta != null) {
+        <div class="meta group">
+        @Display(Model.Meta)
+        </div>
+        }
+    </div>
+    @if(Model.Footer != null) {
+        @Display(Model.Footer)
+    }
+</div>

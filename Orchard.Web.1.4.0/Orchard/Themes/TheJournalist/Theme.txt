@@ -1,0 +1,7 @@
+﻿Name: The Journalist
+Author: Lucian E. Martin, Sébastien Ros
+Description: Journalist is a smart, minimal theme designed for professional journalists.
+Version: 1.0.0
+Tags: clean, conservative, light, minimal
+Website: http://thejournalisttheme.codeplex.com
+Zones: Header, Messages, Content, SideBar, Description, Footer

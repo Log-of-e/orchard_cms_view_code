@@ -1,0 +1,34 @@
+﻿@using Orchard.ContentManagement;
+
+@{
+    var userCanRegister = @WorkContext.CurrentSite.As<Orchard.Users.Models.RegistrationSettingsPart>().UsersCanRegister;
+    var enableLostPassword = @WorkContext.CurrentSite.As<Orchard.Users.Models.RegistrationSettingsPart>().EnableLostPassword;
+}
+
+<h1>@Html.TitleForPage((string)Model.Title)</h1>
+
+<div id="content">
+<p>
+    <h3 class="reply">@T("Please enter your username and password.")</h3>
+    @if(userCanRegister) { @Html.ActionLink(T("Register").Text, "Register") @T(" if you don't have an account.") }
+    @if(enableLostPassword) { @Html.ActionLink(T("Lost your Password?").Text, "RequestLostPassword") }
+</p>
+@Html.ValidationSummary(T("Login was unsuccessful. Please correct the errors and try again.").ToString())
+
+@using (Html.BeginFormAntiForgeryPost(Url.Action("LogOn", new { ReturnUrl = Request.QueryString["ReturnUrl"] }), FormMethod.Post, new { id = "loginform" }))
+{
+<div class="postinput">
+    <p>
+        <input type="text" name="userNameOrEmail" class="comment"/>
+        <label for="username-email"><small>@T("Username")</small></label>
+        @Html.ValidationMessage("userNameOrEmail")
+    </p>
+    <p>
+        <input type="password" name="password" class="comment"/>
+        <label for="password"><small>@T("Password")</small></label>
+        @Html.ValidationMessage("password")
+    </p>
+    <input class="submit" type="submit" id="submit" value="@T("Sign In")" />
+</div>
+}
+</div>

@@ -1,0 +1,15 @@
+﻿@{
+    int comments = Model.CommentCount;
+    Orchard.ContentManagement.ContentItem contentItem = Model.ContentPart.ContentItem;
+}
+<p class="comments">
+
+<a href="@Url.ItemDisplayUrl(contentItem)#comments" rel="bookmark">
+@if (comments == 0) {
+    @T("leave a comment")
+}
+else {
+@T.Plural("one comment", "{0} comments", comments)
+}
+</a>
+</p>

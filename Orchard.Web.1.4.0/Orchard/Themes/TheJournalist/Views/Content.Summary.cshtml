@@ -1,0 +1,16 @@
+﻿@using Orchard.Utility.Extensions;
+@{
+    var contentTypeClassName = ((string)Model.ContentItem.ContentType).HtmlClassify();
+}
+
+    <div class="post hentry">
+        @Display(Model.Header)
+        <div class="main entry-content group">
+        @Display(Model.Content)
+        </div>
+        @if(Model.Meta != null) {
+        <div class="meta group">
+        @Display(Model.Meta)
+        </div>
+        }
+    </div>

@@ -1,0 +1,35 @@
+@{
+    RegisterLink(new Orchard.UI.Resources.LinkEntry { Rel = "shortcut icon", Type = "image/x-icon", Href = Href("../Content/favicon.ico") });
+    
+    Layout.SideBar.Add(New.Navigation(), "5"); // inject the Navigation template into the Sidebar, this template renders Layout.Navigation
+    Layout.SideBar.Add(New.User(), "10"); // login and dashboard links
+    Layout.Footer.Add(New.Branding(), "5");
+}
+
+<div id="container" class="group">
+
+    @if (Model.Messages != null) {
+    <div id="messages">
+        @Display(Model.Messages)
+    </div>
+    }
+        
+    @if (Model.Description != null) {
+        Model.Description.Attributes["id"] = "bubble";
+        @Display(Model.Description)
+    }
+    
+    <div id="content">
+    @Display(Model.Content)
+    </div>
+
+    @if (Model.SideBar != null) {
+        Model.SideBar.Attributes["id"] = "sidebar";
+        @Display(Model.SideBar)
+    }
+</div>
+
+@if (Model.Footer != null) {
+    Model.Footer.Attributes["id"] = "footer";
+    @Display(Model.Footer)
+}

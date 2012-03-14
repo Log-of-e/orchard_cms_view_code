@@ -1,0 +1,46 @@
+﻿@using Orchard.Comments.Models;
+@using Orchard.Utility.Extensions;
+@using System.Security.Cryptography;
+
+@functions {
+    MvcHtmlString Gravatar(string email, int size) {
+        MD5 md5 = new MD5CryptoServiceProvider();
+        byte[] result = String.IsNullOrEmpty(email) ? new byte[0] : md5.ComputeHash(System.Text.Encoding.ASCII.GetBytes(email));
+
+        System.Text.StringBuilder hash = new System.Text.StringBuilder();
+        for (int i = 0; i < result.Length; i++)
+            hash.Append(result[i].ToString("x2"));
+
+        System.Text.StringBuilder image = new System.Text.StringBuilder();
+        image.Append("http://www.gravatar.com/avatar.php?");
+        image.Append("gravatar_id=" + hash.ToString());
+        image.Append("&rating=G");
+        image.Append("&size=" + size);
+        image.Append("&default=");
+        //image.Append(Server.UrlEncode("http://example.com/noavatar.gif"));
+        image.Append("mm");
+        return new MvcHtmlString(image.ToString());
+    }
+}
+
+@{
+    string author = Model.ContentItem.CommonPart.Owner.UserName;
+}
+<ol class="commentlist">
+@foreach (var comment in (IEnumerable<Orchard.Comments.Models.CommentPart>)Model.Comments) {
+    <li id="comment-@comment.Id" class="comment @if (String.Equals(comment.Record.Author, author, StringComparison.OrdinalIgnoreCase)) { <text>bypostauthor</text>}">
+        <div class="comment_mod"></div>
+        <div class="comment_text">
+        @(new MvcHtmlString(Html.Encode(comment.Record.CommentText).ReplaceNewLinesWith("<br />$1")))
+        </div>
+
+        <div class="comment_author vcard">
+        <img src="@Gravatar(comment.Record.Email, 32)" class="avatar avatar-32" height="32" width="32"/>
+        <p><strong class="fn">@comment.Record.Author</strong></p>
+        <p><small>@comment.Record.CommentDateUtc.GetValueOrDefault().ToLocalTime().ToString("d MMM y") at <a href="#comment-@comment.Id">@comment.Record.CommentDateUtc.GetValueOrDefault().ToLocalTime().ToString("t")</a></small></p>
+        </div>
+        <div class="clear"></div>
+    </li>
+}
+</ol>
+
